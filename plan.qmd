@@ -1,0 +1,17 @@
+---
+title: "Plan"
+format: html
+editor: visual
+---
+
+# RIVE Hacking 2024
+
+Auteurs
+
+Titre préliminaire
+
+Mots-clés
+
+Keywords
+
+# Plan d'analyse
