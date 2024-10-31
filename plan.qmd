@@ -4,7 +4,51 @@ format: html
 editor: visual
 ---
 
-# RIVE Hacking 2024
+# RIVE Hacking 2024 - Prédictions de la VAS
+
+Préparation du document par Arthur de Grandpré (\@arthur.de.grandpre\@uqtr.ca)
+
+Télédétection de la turbidité fournies par Jawad Ziyad (\@jawad.ziyad\@uqtr.ca)
+
+Gestion de projet RIVE par Charles Martin
+
+Données RSI fournies par Martin Laporte
+
+Participants au hacking:
+
+# Guide du collaborateur
+
+### Collaborer aux analyses
+
+En fournissant des données
+
+En écrivant du code
+
+En révisant du code
+
+### Collaborer à la rédaction
+
+Drafting sur google docs (LIEN); Arthur & Jawad
+
+### Collaborer à la révision
+
+Révisions majeures; Charles, Martin, Gilbert, Alex
+
+Révisions mineures
+
+# Définition du projet
+
+## Objectifs
+
+1.   ....
+
+## Analyse
+
+### Objectif 1;
+
+### Objectif 2;
+
+## Rédaction
 
 Auteurs
 
@@ -14,4 +58,38 @@ Mots-clés
 
 Keywords
 
-# Plan d'analyse
+#### TABLE DES MATIÈRES / OUTLINE
+
+-   Introduction
+
+    -   P1
+
+-   Méthodes
+
+    -   P1
+
+    -   Fig. 1
+
+    -   Table 1
+
+    -   ....
+
+-   Resultats
+
+    -   P1
+
+    -   Fig. X
+
+    -   Table X
+
+    -   ...
+
+-   Discussion et conclusion
+
+    -   P1
+
+    -   ...
+
+## Calendrier
+
+14 novembre: update meeting
