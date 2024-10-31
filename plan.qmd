@@ -12,13 +12,16 @@ editor: visual
 
 #### En fournissant des données
 
-Pour ce faire, communiquer directement avec Arthur de Grandpré (arthur.de.grandpre\@uqtr.ca). Un dossier google drive sera mis en place pour archiver les données utilisées au cours du projet.
+Les données communes utiles au projet sont disponibles ici : <https://drive.google.com/drive/folders/1rTOpsawp6wyz203UpsUlFQBKpumsEt2B?usp=sharing>
+
+Pour ajouter ou modifier des données dans ce dossier, communiquer directement avec Arthur de Grandpré (arthur.de.grandpre\@uqtr.ca). SVP, veuillez fournir des métadonnées suffisantes à l'utilisation correcte des données dans un readme associé, détaillant les limites d'utilisation des données ainsi que les informations nécessaires pour vous contacter.
 
 #### En contribuant au code (écriture ou révision)
 
-Pour ce faire, cloner le répositoire Github du projet situé à l'addresse suivante:
+Les scriptes utilisés pour produire les analyses sont disponibles ici :\
+<https://github.com/arthurdegrandpre/RIVE24-SAV-RSI>
 
-(...)
+Pour consulter, réviser, ou écrire les scriptes, cloner le répositoire Github du projet.
 
 Les analyses principales seront réalisées de préférence en R, au sein d'un document Quarto (.qmd) afin de faciliter la prise en main du document par les multiples collaborateurs. Pour éviter d'encombrer ce scripte, l'écriture de fonctions externes est fortement encouragée. Prière d'annoter synthétiquement vos contributions pour garder le document principal le plus propre possible. L'annotation détaillée des fonctions externes est recommandée.
 
@@ -26,19 +29,23 @@ Un example de fonction externe est inclus dans le fichier ex_Fonction.R
 
 Pour intégrer vos contributions au projet, réaliser un pull request pour lancer la demande d'intégration via Github.
 
+Pour demander des corrections ou des débug allant au delà de vos connaissances, ouvrir une question dans la section "issues". Le problème sera alors visible pour tous, et une solution commune pourra être mise en place.
+
 ### Collaborer à la rédaction
 
-Proposition 1:
+*Proposition 1:*
 
-La rédaction sera collaborative et réalisée en français dans l'objectif de publier dans le Naturaliste Canadien.
+*La rédaction sera collaborative et réalisée en français dans l'objectif de publier dans le Naturaliste Canadien.*
 
-Proposition 2:
+*Proposition 2:*
 
-La rédaction sera collaborative et réalisée en anglais, avec pour objectif de publier dans (...)
+*La rédaction sera collaborative et réalisée en anglais, avec pour objectif de publier dans (...)*
 
-La rédaction du premier draft sera faite en collaboration simultanée via google docs pour favoriser l'accès de tous les participants concernés. Le style sera homogénéisé plus tard dans le processus. La gestion des références sera effectuée via Zotero.
+La rédaction du premier draft sera faite en collaboration simultanée via google docs pour favoriser l'accès de tous les participants concernés. Le style sera homogénéisé plus tard dans le processus. La gestion des références sera effectuée via Zotero **(à mettre en place)**.
 
-Drafting sur google docs (LIEN); Arthur & Jawad
+Le draft principal est disponible ici pour écriture ccollaborative:
+
+<https://docs.google.com/document/d/1R0eGx85XrIQJBPbc_E8IsxTSuFN2RSQdQkBR_6d-3nY/edit?usp=sharing>
 
 ### Collaborer à la révision
 
