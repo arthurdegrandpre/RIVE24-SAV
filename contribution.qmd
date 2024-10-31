@@ -25,7 +25,7 @@ Pour consulter, réviser, ou écrire les scriptes, cloner le répositoire Github
 
 Les analyses principales seront réalisées de préférence en R, au sein d'un document Quarto (.qmd) afin de faciliter la prise en main du document par les multiples collaborateurs. Pour éviter d'encombrer ce scripte, l'écriture de fonctions externes est fortement encouragée. Prière d'annoter synthétiquement vos contributions pour garder le document principal le plus propre possible. L'annotation détaillée des fonctions externes est recommandée.
 
-Un example de fonction externe est inclus dans le fichier ex_Fonction.R
+Un example de fonction externe est inclus dans le fichier ex_fonction.R
 
 Pour intégrer vos contributions au projet, réaliser un pull request pour lancer la demande d'intégration via Github.
 

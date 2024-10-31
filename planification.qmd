@@ -8,13 +8,18 @@ editor: visual
 
 ## Objectifs
 
-1.  ....
+1.  Évaluer la performance de prédiction de la présence de végétation aquatique submergée dans les différents tronçons fluviaux du fleuve Saint-Laurent à l'aide des données RSI
+2.  Évaluer l'importance de la phénologie de la turbidité et du niveau d'eau dans la prédiction de la couverture de VAS dans un tronçon particulièrement dynamique, le lac Saint-Pierre
 
 ## Plan d'analyse
 
-### Objectif 1;
+### Objectif 1: 
+
+Cet objectif a été réalisé dans le contexte du RIVE hacking 2024, à la maison Gault.
 
 ### Objectif 2;
+
+Cet objectif est réalisé dans un contexte de collaboration plus large avec l'équipe du Pr. Alex Roy (UQTR) et du DEFA (MELCCFP), principalement via l'implication de Jawad Ziyad (Postdoc)
 
 ## Calendrier
 
