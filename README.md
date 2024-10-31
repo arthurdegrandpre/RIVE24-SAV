@@ -6,6 +6,8 @@ IMPORTANT:
 Afin de contribuer à ce projet, veuillez suivre les instructions contenues dans le guide du collaborateur,
 disponible dans le fichier contribution.qmd
 
+Le plan d'analyse et d'écriture est disponible dans le fichier planif.qmd
+
 Ce repositoire est maintenu par Arthur de Grandpré
 mail: arthur.de.grandpre@uqtr.ca 
 github: arthurdegrandpre

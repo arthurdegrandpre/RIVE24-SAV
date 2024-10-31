@@ -1,0 +1,21 @@
+---
+title: "Planification"
+format: html
+editor: visual
+---
+
+# Définition du projet
+
+## Objectifs
+
+1.  ....
+
+## Plan d'analyse
+
+### Objectif 1;
+
+### Objectif 2;
+
+## Calendrier
+
+14 novembre: update meeting

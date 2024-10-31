@@ -53,64 +53,6 @@ Révisions majeures; Charles, Martin, Gilbert, Alex
 
 Révisions mineures; Tous les participants
 
-# Définition du projet
-
-## Objectifs
-
-1.  ....
-
-## Plan d'analyse
-
-### Objectif 1;
-
-### Objectif 2;
-
-## Rédaction
-
-Auteurs
-
-Titre préliminaire
-
-Mots-clés
-
-Keywords
-
-#### TABLE DES MATIÈRES / OUTLINE
-
--   Introduction
-
-    -   P1
-
--   Méthodes
-
-    -   P1
-
-    -   Fig. 1
-
-    -   Table 1
-
-    -   ....
-
--   Resultats
-
-    -   P1
-
-    -   Fig. X
-
-    -   Table X
-
-    -   ...
-
--   Discussion et conclusion
-
-    -   P1
-
-    -   ...
-
-## Calendrier
-
-14 novembre: update meeting
-
 ## Credits
 
 Préparation du document par Arthur de Grandpré (\@arthur.de.grandpre\@uqtr.ca)
