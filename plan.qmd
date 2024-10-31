@@ -6,27 +6,37 @@ editor: visual
 
 # RIVE Hacking 2024 - Prédictions de la VAS
 
-Préparation du document par Arthur de Grandpré (\@arthur.de.grandpre\@uqtr.ca)
-
-Télédétection de la turbidité fournies par Jawad Ziyad (\@jawad.ziyad\@uqtr.ca)
-
-Gestion de projet RIVE par Charles Martin
-
-Données RSI fournies par Martin Laporte
-
-Participants au hacking:
-
 # Guide du collaborateur
 
 ### Collaborer aux analyses
 
-En fournissant des données
+#### En fournissant des données
 
-En écrivant du code
+Pour ce faire, communiquer directement avec Arthur de Grandpré (arthur.de.grandpre\@uqtr.ca). Un dossier google drive sera mis en place pour archiver les données utilisées au cours du projet.
 
-En révisant du code
+#### En contribuant au code (écriture ou révision)
+
+Pour ce faire, cloner le répositoire Github du projet situé à l'addresse suivante:
+
+(...)
+
+Les analyses principales seront réalisées de préférence en R, au sein d'un document Quarto (.qmd) afin de faciliter la prise en main du document par les multiples collaborateurs. Pour éviter d'encombrer ce scripte, l'écriture de fonctions externes est fortement encouragée. Prière d'annoter synthétiquement vos contributions pour garder le document principal le plus propre possible. L'annotation détaillée des fonctions externes est recommandée.
+
+Un example de fonction externe est inclus dans le fichier ex_Fonction.R
+
+Pour intégrer vos contributions au projet, réaliser un pull request pour lancer la demande d'intégration via Github.
 
 ### Collaborer à la rédaction
+
+Proposition 1:
+
+La rédaction sera collaborative et réalisée en français dans l'objectif de publier dans le Naturaliste Canadien.
+
+Proposition 2:
+
+La rédaction sera collaborative et réalisée en anglais, avec pour objectif de publier dans (...)
+
+La rédaction du premier draft sera faite en collaboration simultanée via google docs pour favoriser l'accès de tous les participants concernés. Le style sera homogénéisé plus tard dans le processus. La gestion des références sera effectuée via Zotero.
 
 Drafting sur google docs (LIEN); Arthur & Jawad
 
@@ -34,7 +44,7 @@ Drafting sur google docs (LIEN); Arthur & Jawad
 
 Révisions majeures; Charles, Martin, Gilbert, Alex
 
-Révisions mineures
+Révisions mineures; Tous les participants
 
 # Définition du projet
 
@@ -42,7 +52,7 @@ Révisions mineures
 
 1.   ....
 
-## Analyse
+## Plan d'analyse
 
 ### Objectif 1;
 
@@ -93,3 +103,15 @@ Keywords
 ## Calendrier
 
 14 novembre: update meeting
+
+## Credits
+
+Préparation du document par Arthur de Grandpré (\@arthur.de.grandpre\@uqtr.ca)
+
+Télédétection de la turbidité fournies par Jawad Ziyad (\@jawad.ziyad\@uqtr.ca)
+
+Gestion de projet RIVE par Charles Martin
+
+Données RSI fournies par Martin Laporte
+
+Participants au hacking:
