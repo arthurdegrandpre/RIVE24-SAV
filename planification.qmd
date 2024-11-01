@@ -46,10 +46,37 @@ Cet objectif a été réalisé majoritairement dans le contexte du RIVE hacking 
 
 Base de données du Réseau de Suivi Ichtyologique (RSI; MELCCFP)
 
-Variables:
-
 ```{r table_sommaire_RSI, echo=FALSE}
-library(googledrive)
+library(tidyverse)
+library(reactable)
+rsi = read.csv("local/rsi.csv", header=T)
+rsi %>%
+  group_by(Secteur, Annee) %>%
+  select(-X, -Bimesure, -Station, -Rive, -Longitude, -Latitude, -Mesure, -Fin) %>%
+  pivot_longer(cols=c(3:34)) %>%
+  na.omit() %>%
+  filter(name %in% c("Prof_Moyenne",
+                     "Turbidite",
+                     "pH",
+                     "perc_Secchi",
+                     "Abondance",
+                     "Conductivite",
+                     "TemperatureEau",
+                     "WLEVEL"),
+         Secteur %in% c("ArchStPierre",
+                        "LacStFrancois",
+                        "LacStLouis",
+                        "LacStPierre",
+                        "BecanBatiscan",
+                        "MtlSorel",
+                        "HautRichelieu",
+                        "LacDeuxMontagnes"),
+         ) %>%
+  group_by(Secteur, Annee, name) %>%
+  summarise(mean = round(mean(value, na.rm=T),3), sd = round(sd(value, na.rm=T),3), n=n()) %>%
+  ungroup() %>%
+  group_by(Secteur, Annee) %>%
+  reactable(searchable = T, filterable = T, sortable = T)
 
 ```
 
@@ -90,6 +117,48 @@ Cet objectif est réalisé dans un contexte de collaboration plus large avec l'�
 ### Data:
 
 Base de données du Réseau de Suivi Ichtyologique (RSI; MELCCFP), secteur lac Saint-Pierre uniquement (voir objectif 1)
+
+```{r table_sommaire_RSI2 ,echo=F}
+rsi %>%
+  group_by(Secteur, Annee) %>%
+  select(-X, -Bimesure, -Station, -Rive, -Longitude, -Latitude, -Mesure, -Fin) %>%
+  pivot_longer(cols=c(3:34)) %>%
+  na.omit() %>%
+  filter(name %in% c("Prof_Moyenne",
+                     "Turbidite",
+                     "pH",
+                     "perc_Secchi",
+                     "Abondance",
+                     "Conductivite",
+                     "TemperatureEau",
+                     "WLEVEL"),
+         Secteur %in% c("LacStPierre"),
+         ) %>%
+  group_by(Secteur, Annee, name) %>%
+  summarise(mean = round(mean(value, na.rm=T),3), sd = round(sd(value, na.rm=T),3), n=n()) %>%
+  ungroup() %>%
+  group_by(Secteur, Annee) %>%
+  reactable(searchable = T, filterable = T, sortable = T)
+
+```
+
+Turbidité estimée par télédétection optique (détails)
+
+NOTE : EFFET OMBRE / NUAGES 070508
+
+```{r, echo=F}
+library(sf)
+library(stars)
+
+r = stars::read_stars(dir("local/turbidité/", full.names=T), along = 3)
+
+```
+
+Niveau d'eau mesuré à la bouée de Sorel (détails)
+
+```{r}
+
+```
 
 ### Description des analyses:
 

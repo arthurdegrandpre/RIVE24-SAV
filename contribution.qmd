@@ -23,6 +23,8 @@ Les scriptes utilisés pour produire les analyses sont disponibles ici :\
 
 Pour consulter, réviser, ou écrire les scriptes, cloner le répositoire Github du projet. Une compréhension sommaire de l'utilisation de Git est recommandée.
 
+Pour permettre les analyses, télécharger les données de googledrive vers le dossier local du projet. Son contenu sera ignoré par Git.
+
 Les analyses principales seront réalisées de préférence en R, au sein d'un document Quarto (.qmd) afin de faciliter la prise en main du document par les multiples collaborateurs. Pour éviter d'encombrer ce scripte, l'écriture de fonctions externes est fortement encouragée. Prière d'annoter synthétiquement vos contributions pour garder le document principal le plus propre possible. L'annotation détaillée des fonctions externes est recommandée.
 
 Un example de fonction externe est inclus dans le fichier ex_fonction.R
