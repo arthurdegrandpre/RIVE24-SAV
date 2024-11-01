@@ -50,6 +50,7 @@ Variables:
 
 ```{r table_sommaire_RSI, echo=FALSE}
 library(googledrive)
+
 ```
 
 ### Description des analyses:

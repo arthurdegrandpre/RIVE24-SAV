@@ -21,7 +21,7 @@ Pour ajouter ou modifier des données dans ce dossier, communiquer directement a
 Les scriptes utilisés pour produire les analyses sont disponibles ici :\
 <https://github.com/arthurdegrandpre/RIVE24-SAV-RSI>
 
-Pour consulter, réviser, ou écrire les scriptes, cloner le répositoire Github du projet.
+Pour consulter, réviser, ou écrire les scriptes, cloner le répositoire Github du projet. Une compréhension sommaire de l'utilisation de Git est recommandée.
 
 Les analyses principales seront réalisées de préférence en R, au sein d'un document Quarto (.qmd) afin de faciliter la prise en main du document par les multiples collaborateurs. Pour éviter d'encombrer ce scripte, l'écriture de fonctions externes est fortement encouragée. Prière d'annoter synthétiquement vos contributions pour garder le document principal le plus propre possible. L'annotation détaillée des fonctions externes est recommandée.
 
@@ -30,6 +30,8 @@ Un example de fonction externe est inclus dans le fichier ex_fonction.R
 Pour intégrer vos contributions au projet, réaliser un pull request pour lancer la demande d'intégration via Github.
 
 Pour demander des corrections ou des débug allant au delà de vos connaissances, ouvrir une question dans la section "issues". Le problème sera alors visible pour tous, et une solution commune pourra être mise en place.
+
+Le projet a été initialisé sous la version 4.4.1 de R et 2024.09.0 (build 375) de RStudio, sous Windows 11.
 
 ### Collaborer à la rédaction
 
