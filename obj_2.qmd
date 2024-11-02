@@ -4,23 +4,22 @@ format: html
 editor: visual
 ---
 
-## Quarto
+# Objectif 2
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+Évaluer l'importance de la phénologie de la turbidité et du niveau d'eau dans la prédiction de la couverture de VAS dans le lac Saint-Pierre, un tronçon particulièrement dynamique.
 
-## Running Code
+1.  Estimer la variabilité saisonnière de la turbidité au lac Saint-Pierre via télédétection satellitaire optique.
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+    1.  Comment la présence de VAS affecte l'estimation de la turbidité?
 
-```{r}
-1 + 1
-```
+2.  Dresser un portrait saisonnier de la turbidité, du niveau d'eau et de la température de l'eau pour les années d'observations RSI au lac Saint-Pierre.
 
-You can add options to executable code like this
+3.  Modéliser l'importance des variations spatiotemporelles physico-chimiques du milieu à l'échelle annuelle pour la prédiction de la présence de VAS au lac Saint-Pierre.
 
-```{r}
-#| echo: false
-2 * 2
-```
+Cet objectif est réalisé dans un contexte de collaboration plus large avec l'équipe du Pr. Alexandre Roy (UQTR) et du DEFA (MELCCFP), principalement via l'implication de Jawad Ziyad (Postdoc).
 
-The `echo: false` option disables the printing of code (only output is displayed).
+Équipe responsable: Arthur de Grandpré et Jawad Ziyad, avec contribution de Martin Laporte, Charles Martin, Alexandre Roy, Rémy Pouliot, Philippe Brodeur
+
+# Méthodes
+
+# Analyse

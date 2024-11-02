@@ -4,23 +4,24 @@ format: html
 editor: visual
 ---
 
-## Quarto
+# Objectif 1
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+**Évaluer la performance de prédiction de la présence de végétation aquatique submergée dans les différents tronçons fluviaux du fleuve Saint-Laurent à l'aide des données RSI**
 
-## Running Code
+1.  Modéliser statistiquement la relation entre la profondeur et la disponibilité en lumière pour les différents tronçons fluviaux du fleuve Saint-Laurent.
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+2.  Évaluer l'importance de la variabilité physico-chimique / optique de l'eau dans la prédiction de la présence de VAS dans le cas du lac Saint-Pierre, via l'intégration des masses d'eau dans le modèle prédictif.
 
-```{r}
-1 + 1
-```
+Cet objectif a été réalisé majoritairement dans le contexte du RIVE hacking 2024, à la maison Gault.
 
-You can add options to executable code like this
+Équipe responsable: Arthur de Grandpré, Gilbert Cabana, Thibault Tournadre, avec contribution de Martin Laporte et Charles Martin
 
-```{r}
-#| echo: false
-2 * 2
-```
+# Méthode
 
-The `echo: false` option disables the printing of code (only output is displayed).
+Modélistion statistique non linéaire des effets de la profondeur **(au zéro bathymétrique ou brute?)** et de la disponibilité en lumière (turbidité, ou Secchi) par modèles additifs généralisés (GAM).
+
+Effets fixes: Profondeur, Secchi, Interaction Profondeur-Secchi
+
+Effets aléatoires: Années, Secteurs, Masse d'eau
+
+# Analyse
