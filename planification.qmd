@@ -46,7 +46,7 @@ Cet objectif a été réalisé majoritairement dans le contexte du RIVE hacking 
 
 Base de données du Réseau de Suivi Ichtyologique (RSI; MELCCFP)
 
-```{r table_sommaire_RSI, echo=FALSE}
+```{r table_sommaire_RSI, echo=FALSE, message=F, warning=F}
 library(tidyverse)
 library(reactable)
 rsi = read.csv("local/rsi.csv", header=T)
@@ -118,7 +118,7 @@ Cet objectif est réalisé dans un contexte de collaboration plus large avec l'�
 
 Base de données du Réseau de Suivi Ichtyologique (RSI; MELCCFP), secteur lac Saint-Pierre uniquement (voir objectif 1)
 
-```{r table_sommaire_RSI2 ,echo=F}
+```{r table_sommaire_RSI2 ,echo=F, message=F, warning=F}
 rsi %>%
   group_by(Secteur, Annee) %>%
   select(-X, -Bimesure, -Station, -Rive, -Longitude, -Latitude, -Mesure, -Fin) %>%
@@ -144,9 +144,9 @@ rsi %>%
 
 Turbidité estimée par télédétection optique (détails)
 
-NOTE : EFFET OMBRE / NUAGES 070508
+NOTE : EFFET OMBRES / NUAGES 070508 À VÉRIFIER
 
-```{r, echo=F}
+```{r, echo=F, message=F, warning=F}
 library(sf)
 library(stars)
 
@@ -154,10 +154,31 @@ r = stars::read_stars(dir("local/turbidité/", full.names=T), along = 3)
 
 ```
 
-Niveau d'eau mesuré à la bouée de Sorel (détails)
+Niveau d'eau mesuré à la bouée de Lanoraie (SOREL INCOMPLET ENTRE 2010 ET 2013?)
 
-```{r}
+```{r, echo=FALSE, message=F, warning=F}
+library(lubridate)
+wl = read.csv("local/niveau_lanoraie_quotidien.csv",skip=1) %>%
+  select(ANNÉE,JJ,mai,Jun,Jul,Aoû,Sep) %>%
+  pivot_longer(cols=3:7, names_to="Mois", values_to = "niveau_m") %>%
+  filter(ANNÉE %in% c(2007,2013,2018,2021)) %>%
+  mutate(Mois2 = case_when(Mois == "mai" ~ "05",
+                           Mois == "Jun" ~ "06",
+                           Mois == "Jul" ~ "07",
+                           Mois == "Aoû" ~ "08",
+                           Mois == "Sep" ~ "09"),
+         Date = lubridate::ymd(paste(ANNÉE,Mois2,JJ, sep="-"))) #%>%
+  #select(Date, niveau_m)
 
+wl %>%
+  na.omit() %>%
+  ggplot(
+    aes(x = ymd(paste("2021",month(Date),day(Date),sep="-")),
+        y = niveau_m,
+        col = as.factor(year(Date)))
+  ) +
+  geom_line()+
+  facet_wrap(~year(Date), scales = "free_x")
 ```
 
 ### Description des analyses:
