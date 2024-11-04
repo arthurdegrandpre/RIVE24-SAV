@@ -8,7 +8,7 @@ editor: visual
 
 **Évaluer la performance de prédiction de la présence de végétation aquatique submergée dans les différents tronçons fluviaux du fleuve Saint-Laurent à l'aide des données RSI**
 
-1.  Modéliser statistiquement la relation entre la profondeur et la disponibilité en lumière pour les différents tronçons fluviaux du fleuve Saint-Laurent.
+1.  Modéliser statistiquement la relation entre la présence de VAS, la profondeur et la disponibilité en lumière pour les différents tronçons fluviaux du fleuve Saint-Laurent.
 
 2.  Évaluer l'importance de la variabilité physico-chimique / optique de l'eau dans la prédiction de la présence de VAS dans le cas du lac Saint-Pierre, via l'intégration des masses d'eau dans le modèle prédictif.
 
@@ -18,7 +18,7 @@ Cet objectif a été réalisé majoritairement dans le contexte du RIVE hacking 
 
 # Méthode
 
-Modélistion statistique non linéaire des effets de la profondeur **(au zéro bathymétrique ou brute?)** et de la disponibilité en lumière (turbidité, ou Secchi) par modèles additifs généralisés (GAM).
+Modélistion statistique non linéaire des effets de la profondeur **(au zéro bathymétrique ou brute?)** et de la disponibilité en lumière (turbidité, ou Secchi) par modèles modèles linéaires généralisés (GLM) ***et/ou additifs généralisés (GAM).***
 
 Effets fixes: Profondeur, Secchi, Interaction Profondeur-Secchi
 
@@ -26,9 +26,139 @@ Effets aléatoires: Années, Secteurs, Masse d'eau
 
 # Analyse
 
-```{r}
+Charger les packages
+
+```{r libs, message=F, warning=F, echo=F}
+library(tidyverse)
 library(lme4)
 library(mgcv)
 library(performance)
+library(ggpubr)
+```
+
+Préparer les données pour l'analyse des secteurs visés, et création d'une variable présence/absence binaire.
+
+```{r datasetup, message=F, warning=F, echo=F}
+rsi = read.csv("local/rsi.csv", header=T)
+
+df = rsi %>%
+  group_by(Secteur, Annee) %>%
+  select(-X, -Bimesure, -Station, -Rive, -Longitude, -Latitude, -Mesure, -Fin) %>%
+  mutate(Presence = case_when(Abondance <= 1 ~ 0,
+                                  Abondance > 1 ~ 1)) %>%
+  drop_na(Presence) %>%
+  filter(Secteur %in% c("ArchStPierre",
+                        "LacStFrancois",
+                        "LacStLouis",
+                        "LacStPierre",
+                        "BecanBatiscan",
+                        "MtlSorel",
+                        "HautRichelieu",
+                        "LacDeuxMontagnes")
+         )
+```
+
+1.  Modéliser statistiquement la relation entre la présence de VAS, la profondeur et la disponibilité en lumière pour les différents tronçons fluviaux du fleuve Saint-Laurent.
+
+Visualisation des effets individuels
+
+```{r vis, message=F, warning=F}
+gg_prof = df %>% 
+  ggplot(aes(x=Prof_Moyenne, y=Presence))+
+  geom_point()+
+  geom_smooth(method = "gam", se=T)+
+  geom_smooth(method = "gam", se=F, aes(col=df$Secteur))
+
+gg_turbi = df %>% 
+  ggplot(aes(x=Turbidite, y=Presence))+
+  geom_point()+
+  geom_smooth(method = "gam", se=T)+
+  geom_smooth(method = "gam", se=F, aes(col=df$Secteur))
+
+ggpubr::ggarrange(gg_prof, gg_turbi, common.legend = T)
 
 ```
+
+Bien que l'effet de la profondeur soit évident, avec un intercept fort variable, les effets de la turbidité sont plus difficiles à visualiser comme tel.
+
+Modélisation des effets; glmer
+
+```{r glmerfit}
+fit_1 = glmer(
+  Presence ~ Turbidite + Prof_Moyenne + (1|Annee) + (1|Secteur),
+            data = df,
+            family = binomial)
+
+fit_1_interaction = glmer(
+  Presence ~ Turbidite * Prof_Moyenne + (1|Annee) + (1|Secteur),
+            data = df,
+            family = binomial)
+
+compare_performance(fit_1, fit_1_interaction)
+```
+
+Résulte en une sélection du modèle sans intéraction. Le faible R2 marginal suggère un effet important des facteurs aléatoires (Année et Secteur)
+
+```{r glmerfit_summary}
+summary(fit_1)
+```
+
+Les deux effets fixes sont considérés significatifs.
+
+Comparaison des secteurs
+
+```{r glm_secteurs, message=F, warning=F}
+fit_s1 = glmer(
+  Presence ~ Turbidite + Prof_Moyenne + (1|Annee),
+            data = filter(df, Secteur == "ArchStPierre"),
+            family = binomial)
+
+fit_s2 = glmer(
+  Presence ~ Turbidite + Prof_Moyenne + (1|Annee),
+            data = filter(df, Secteur == "LacStFrancois"),
+            family = binomial)
+
+fit_s3 = glmer(
+  Presence ~ Turbidite + Prof_Moyenne + (1|Annee),
+            data = filter(df, Secteur == "LacStLouis"),
+            family = binomial)
+
+fit_s4 = glmer(
+  Presence ~ Turbidite + Prof_Moyenne + (1|Annee),
+            data = filter(df, Secteur == "LacStPierre"),
+            family = binomial)
+
+fit_s5 = glmer(
+  Presence ~ Turbidite + Prof_Moyenne + (1|Annee),
+            data = filter(df, Secteur == "BecanBatiscan"),
+            family = binomial)
+
+fit_s6 = glmer(
+  Presence ~ Turbidite + Prof_Moyenne + (1|Annee),
+            data = filter(df, Secteur == "MtlSorel"),
+            family = binomial)
+
+fit_s7 = glm( # sans effet aléatoire car une seule année disponible
+  Presence ~ Turbidite + Prof_Moyenne,
+            data = filter(df, Secteur == "HautRichelieu"),
+            family = binomial)
+
+fit_s8 = glm( # sans effet aléatoire car une seule année disponible
+  Presence ~ Turbidite + Prof_Moyenne,
+            data = filter(df, Secteur == "LacDeuxMontagnes"),
+            family = binomial)
+
+compare_performance(fit_s1, fit_s2, fit_s3, fit_s4, fit_s5, fit_s6, fit_s7, fit_s8)
+```
+
+Les résultats suggèrent une variabilité importante entre les secteurs, avec des performances predictives beaucoup plus faibles dans les secteurs de l'archipelle du Lac Saint-Pierre et du Lac Saint-Pierre; le tronçon le moins profond, le plus turbide, mais aussi le plus contrasté spatiotemporellement (masses d'eau, innondations).
+
+
+Modélisation alternative des effets; gamm
+
+```{r gamfit}
+
+```
+
+
+2.  Évaluer l'importance de la variabilité physico-chimique / optique de l'eau dans la prédiction de la présence de VAS dans le cas du lac Saint-Pierre, via l'intégration des masses d'eau dans le modèle prédictif.

@@ -34,7 +34,7 @@ editor: visual
 
 Évaluer la performance de prédiction de la présence de végétation aquatique submergée dans les différents tronçons fluviaux du fleuve Saint-Laurent à l'aide des données RSI.
 
-1.  Modéliser statistiquement la relation entre la profondeur et la disponibilité en lumière pour les différents tronçons fluviaux du fleuve Saint-Laurent.
+1.  Modéliser statistiquement la relation entre la présence de VAS, la profondeur et la disponibilité en lumière pour les différents tronçons fluviaux du fleuve Saint-Laurent.
 
 2.  Évaluer l'importance de la variabilité physico-chimique / optique de l'eau dans la prédiction de la présence de VAS dans le cas du lac Saint-Pierre, via l'intégration des masses d'eau dans le modèle prédictif.
 
