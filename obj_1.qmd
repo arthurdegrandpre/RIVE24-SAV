@@ -25,3 +25,50 @@ Effets fixes: Profondeur, Secchi, Interaction Profondeur-Secchi
 Effets aléatoires: Années, Secteurs, Masse d'eau
 
 # Analyse
+
+```{r}
+library(lme4)
+library(performance)
+f1 = glmer(ab_bin ~ Zphod + (1|masse_mean) +(1|Annee), data=lsp2, family = binomial)
+f2 = glm(ab_bin ~ Zphod, data=lsp2, family = binomial)
+f3 = glmer(ab_bin ~ Secchi + Prof_Moyenne + (1|Annee), data=lsp2, family = binomial)
+
+
+f4 = glmer(ab_bin ~ Secchi + Prof_Moyenne + (1|Annee), data=lsp2 %>% filter(masse_mean=="Nord"), family = binomial)
+summary(f4)
+performance(f4)
+
+f5 = glmer(ab_bin ~ Secchi + Prof_Moyenne + (1|Annee) + (1|masse_mean), data=lsp2, family = binomial)
+f6 = glmer(ab_bin ~ Secchi + Prof_Moyenne + (1|Annee), data=lsp2, family = binomial)
+
+fv1 =glmer(Vam_bin ~ Secchi + Prof_Moyenne + (1|Annee) + (1|masse_mean), data=lsp2, family = binomial)
+fv2 =glmer(Het_bin ~ Secchi + Prof_Moyenne + (1|Annee) + (1|masse_mean), data=lsp2, family = binomial)
+
+performance(fv1)
+performance(fv2)
+summary(fv2)
+
+performance::compare_performance(f5,f6, fv1)
+plot(f5)
+summary(f5)
+
+f2
+performance(f1)
+performance(f2)
+performance(f3)
+performance(f5)
+plot(f1)
+
+se <- sqrt(diag(vcov(f1)))
+# table of estimates with 95% CI
+(tab <- cbind(Est = fixef(f1), LL = fixef(f1) - 1.96 * se, UL = fixef(f1) + 1.96 *
+                se))
+
+
+fg = gam(ab_bin ~ s(Zphod) + s(Annee, bs = "re") + masse_mean, data=lsp2, family="binomial")
+
+plot(fg)
+
+
+
+```
