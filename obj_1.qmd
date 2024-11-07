@@ -43,7 +43,7 @@ rsi = read.csv("local/rsi.csv", header=T)
 
 df = rsi %>%
   group_by(Secteur, Annee) %>%
-  select(-X, -Bimesure, -Station, -Rive, -Longitude, -Latitude, -Mesure, -Fin) %>%
+  select(-X, -Bimesure, -Station, -Rive, -Mesure, -Fin) %>%
   mutate(Presence = case_when(Abondance <= 1 ~ 0,
                                   Abondance > 1 ~ 1)) %>%
   drop_na(Presence) %>%
@@ -148,7 +148,31 @@ fit_s8 = glm( # sans effet aléatoire car une seule année disponible
             data = filter(df, Secteur == "LacDeuxMontagnes"),
             family = binomial)
 
-compare_performance(fit_s1, fit_s2, fit_s3, fit_s4, fit_s5, fit_s6, fit_s7, fit_s8)
+scoretab = compare_performance(fit_s1, fit_s2, fit_s3, fit_s4, fit_s5, fit_s6, fit_s7, fit_s8)
+
+# produire un tableau qui compile les coefficient et différents r2 par secteur
+secteur_summary = tibble(
+  Secteur = c("ArchStPierre", "LacStFrancois", "LacStLouis",
+              "LacStPierre", "BecanBatiscan", "MtlSorel",
+              "HautRichelieu", "LacDeuxMontagnes"),
+  Intercept = c(summary(fit_s1)$coefficients[1,1], summary(fit_s2)$coefficients[1,1],
+                summary(fit_s3)$coefficients[1,1], summary(fit_s4)$coefficients[1,1],
+                summary(fit_s5)$coefficients[1,1], summary(fit_s6)$coefficients[1,1],
+                summary(fit_s7)$coefficients[1,1], summary(fit_s8)$coefficients[1,1]),
+  Turbidite = c(summary(fit_s1)$coefficients[2,1], summary(fit_s2)$coefficients[2,1],
+                summary(fit_s3)$coefficients[2,1], summary(fit_s4)$coefficients[2,1],
+                summary(fit_s5)$coefficients[2,1], summary(fit_s6)$coefficients[2,1],
+                summary(fit_s7)$coefficients[2,1], summary(fit_s8)$coefficients[2,1]),
+  Profondeur = c(summary(fit_s1)$coefficients[3,1], summary(fit_s2)$coefficients[3,1],
+                summary(fit_s3)$coefficients[3,1], summary(fit_s4)$coefficients[3,1],
+                summary(fit_s5)$coefficients[3,1], summary(fit_s6)$coefficients[3,1],
+                summary(fit_s7)$coefficients[3,1], summary(fit_s8)$coefficients[3,1]),
+  R2.cond = scoretab$R2_conditional,
+  R2.marg = scoretab$R2_marginal,
+  R2 = scoretab$R2_Tjur
+)
+
+secteur_summary %>% gt::gt() %>% gt::fmt_number(decimals = 2)
 ```
 
 Les résultats suggèrent une variabilité importante entre les secteurs, avec des performances predictives beaucoup plus faibles dans les secteurs de l'archipelle du Lac Saint-Pierre et du Lac Saint-Pierre; le tronçon le moins profond, le plus turbide, mais aussi le plus contrasté spatiotemporellement (masses d'eau, innondations).
@@ -162,3 +186,17 @@ Modélisation alternative des effets; gamm
 
 
 2.  Évaluer l'importance de la variabilité physico-chimique / optique de l'eau dans la prédiction de la présence de VAS dans le cas du lac Saint-Pierre, via l'intégration des masses d'eau dans le modèle prédictif.
+
+Séparation des masses d'eau
+
+```{r}
+lsp = df %>% filter(Secteur %in% c("LacStPierre"))
+
+hist(lsp$Turbidite)
+hist(lsp$Conductivite)
+
+hc = hclust(dist(lsp %>% select(Turbidite, Conductivite, pH, Latitude, Longitude)))
+plot(hc)
+clusters = cutree(hc, k=4)
+```
+
