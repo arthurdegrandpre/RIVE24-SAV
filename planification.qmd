@@ -24,6 +24,8 @@ editor: visual
 
     2.  Dresser un portrait saisonnier de la turbidité, du niveau d'eau et de la température de l'eau pour les années d'observations RSI au lac Saint-Pierre.
 
+        (NOTE: Possibilité de couverture nuageuse? épisodes de pluie?)
+
     3.  Modéliser l'importance des variations spatiotemporelles physico-chimiques du milieu à l'échelle annuelle pour la prédiction de la présence de VAS au lac Saint-Pierre.
 
     4.  ...

@@ -1,6 +1,8 @@
 ---
 title: "obj_1"
-format: html
+format: 
+  html:
+    self-contained: true
 editor: visual
 ---
 
@@ -195,8 +197,21 @@ lsp = df %>% filter(Secteur %in% c("LacStPierre"))
 hist(lsp$Turbidite)
 hist(lsp$Conductivite)
 
-hc = hclust(dist(lsp %>% select(Turbidite, Conductivite, pH, Latitude, Longitude)))
+hc = hclust(dist(lsp %>% select(Turbidite, Conductivite, pH, TemperatureEau, Latitude, Longitude)))
 plot(hc)
-clusters = cutree(hc, k=4)
+clusters = cutree(hc, k=8)
+
+lsp %>%
+  ungroup() %>% 
+  mutate(clusters = clusters) %>% 
+  ggplot(aes(x=Turbidite, y=Conductivite, col=as.factor(clusters)))+
+  geom_point()
+
+lsp %>% 
+  ggplot(aes(x=Longitude, y=Latitude, col=as.factor(clusters)))+
+  geom_point()+
+  ggtitle("Masses d'eau optiques, Hclust")
+
+table(clusters)
 ```
 
