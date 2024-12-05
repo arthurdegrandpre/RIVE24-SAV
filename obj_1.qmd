@@ -200,14 +200,6 @@ lsp = df %>% filter(Secteur %in% c("LacStPierre")) %>%
 hist(lsp$Turbidite)
 hist(lsp$Conductivite)
 
-lsp %>%
-  select(Turbidite,
-             Conductivite,
-             pH,
-             TemperatureEau,
-             Latitude,
-             Longitude)
-
 hc = hclust(
   dist(
       as.data.frame(lapply(select(lsp, Turbidite, Conductivite, Latitude), function(x) scale(x, center = T)))

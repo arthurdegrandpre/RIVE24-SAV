@@ -1,6 +1,8 @@
 ---
 title: "obj_2"
-format: html
+format: 
+  html:
+    self-contained: true
 editor: visual
 ---
 
@@ -23,3 +25,137 @@ Cet objectif est réalisé dans un contexte de collaboration plus large avec l'�
 # Méthodes
 
 # Analyse
+
+1.  Estimer la variabilité saisonnière de la turbidité au lac Saint-Pierre via télédétection satellitaire optique
+    1.  Prédiction de la turbidité sur des séries temporelles : **Analyses réalisées sur GEE par Jawad.**
+
+```{r turbidity_gee}
+
+library(sf)
+library(stars)
+
+r = stars::read_stars(dir("local/turbidité/", full.names=T), along=3)
+r = stars::st_set_dimensions(r, 3, names = "time", values = st_get_dimension_values(r, 3) %>% ymd())
+plot(r)
+
+for(i in 1:dim(r)[3]){
+plot(r[,,,i], axes=T, main=st_get_dimension_values(r, 3)[i])
+}
+
+```
+
+Plusieurs images semble poser des problèmes de qualité (nuages et/ou ombres). Il faudra les exclure de l'analyse.(Au moins pour l'instant)
+
+```{r}
+r2 = r[,,,c(2,6,7,8,9,10,14,15)]
+plot(r2)
+```
+Les images restantes sont limitées dans leur couverture temporelle. Les années 2007, 2013 et 2021 possèdent une image au mois de mai.
+Les patterns spatiaux ne semblent pas constants au cours d'une année: en 2021, en mai, la rive sud est plus turbide, alors que c'est la rive nord en juillet.
+D'une année à l'autre, les patterns ne semblent pas tenir non plus: en mai 2007, on voit un pic de turbidité sur la rive nord, en 2013 le lac est relativement homogène, et en 2021 c'est plutot la rive sud.
+
+Est-ce que filter moins sévèrement la série temporelle serait une option?
+
+```{r}
+r2 = r[,,,c(1,2,4,6,7,8,9,10,11,12,14,15)]
+
+(dates = stars::st_get_dimension_values(r2, 3))
+
+```
+La couverture temporelle est très limitée. comment les prédictions se comparent-elles aux données RSI?
+
+    2.  Comment la présence de VAS affecte l'estimation de la turbidité?
+
+
+```{r}
+rsi = read.csv("local/rsi.csv", header=T)
+
+df = rsi %>%
+  group_by(Secteur, Annee) %>%
+  select(-X, -Bimesure, -Station, -Rive, -Mesure, -Fin) %>%
+  mutate(Presence = case_when(Abondance <= 1 ~ 0,
+                                  Abondance > 1 ~ 1)) %>%
+  drop_na(Presence) %>%
+  filter(Secteur %in% c("LacStPierre")
+         ) %>% 
+  ungroup() %>% 
+  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326) %>% 
+  st_transform(st_crs(r2))
+
+ex = df %>% 
+  stars::st_extract(r2,.)
+
+exdf = data.frame(ex$NTUm_WL_20070508.tif)
+colnames(exdf) = dates 
+
+exdf_long = exdf %>% 
+  rownames_to_column() %>% 
+  pivot_longer(cols=2:ncol(.), names_to = "Date", values_to = "Turbidite_sat")
+
+df2 = left_join(rownames_to_column(df),exdf_long, by="rowname") %>% 
+  filter(year(Date) == Annee)
+
+df2 %>% 
+  filter(month(.$Date) %in% c(8)) %>%
+  ggplot(aes(x=Turbidite,y=Turbidite_sat, color=as.factor(Presence)))+
+  geom_point()+
+  geom_smooth(method="lm", se=F)+
+  facet_wrap(~Annee)
+
+df2 %>% 
+  filter(month(.$Date) %in% c(8)) %>%
+  ggplot(aes(x=as.factor(Presence),y=Turbidite_sat))+
+  geom_boxplot()+
+  facet_wrap(~Annee)
+
+df2 %>% 
+  filter(month(.$Date) %in% c(8)) %>%
+  ggplot(aes(x=as.factor(Presence),y=Turbidite))+
+  geom_boxplot()+
+  facet_wrap(~Annee)
+```
+Au mois d'août (fin de la période de croissance, période d'étiage), la différence entre la turbidité terrain et la turbidité détectée ne semble pas être liée à la présence de VAS. Dans les deux cas, la turbidité est plus faible en présence de VAS. La correlation entre les deux mesures n'est pas systématiquement meilleure ou pire en présence de VAS.
+
+```{r}
+df2 %>% 
+  ggplot(aes(x=Turbidite_sat,y=Presence))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  facet_wrap(~month(df2$Date)+Annee, scales="free")
+```
+
+```{r}
+df2 %>% 
+  ggplot(aes(x=Turbidite_sat,y=Turbidite))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  facet_wrap(~month(df2$Date)+Annee, scales="free")
+```
+   
+
+2.  Dresser un portrait saisonnier de la turbidité, du niveau d'eau et de la température de l'eau pour les années d'observations RSI au lac Saint-Pierre
+
+```{r}
+wl = read.csv("local/niveau_lanoraie_quotidien.csv",skip=1) %>%
+  select(ANNÉE,JJ,mai,Jun,Jul,Aoû,Sep) %>%
+  pivot_longer(cols=3:7, names_to="Mois", values_to = "niveau_m") %>%
+  filter(ANNÉE %in% c(2007,2013,2018,2021)) %>% #### 2016 plutot que 2018? potentiel de 2002
+  mutate(Mois2 = case_when(Mois == "mai" ~ "05",
+                           Mois == "Jun" ~ "06",
+                           Mois == "Jul" ~ "07",
+                           Mois == "Aoû" ~ "08",
+                           Mois == "Sep" ~ "09"),
+         Date = lubridate::ymd(paste(ANNÉE,Mois2,JJ, sep="-"))) #%>%
+  #select(Date, niveau_m)
+
+wl %>%
+  na.omit() %>%
+  ggplot(
+    aes(x = ymd(paste("2021",month(Date),day(Date),sep="-")),
+        y = niveau_m,
+        col = as.factor(year(Date)))
+  ) +
+  geom_line()+
+  facet_wrap(~year(Date), scales = "free_x")
+```
+
