@@ -153,7 +153,7 @@ library(lubridate)
 wl = read.csv("local/niveau_lanoraie_quotidien.csv",skip=1) %>%
   select(ANNÉE,JJ,mai,Jun,Jul,Aoû,Sep) %>%
   pivot_longer(cols=3:7, names_to="Mois", values_to = "niveau_m") %>%
-  filter(ANNÉE %in% c(2007,2013,2018,2021)) %>%
+  filter(ANNÉE %in% c(2007,2013,2018,2021)) %>% #### 2016 plutot que 2018? potentiel de 2002
   mutate(Mois2 = case_when(Mois == "mai" ~ "05",
                            Mois == "Jun" ~ "06",
                            Mois == "Jul" ~ "07",

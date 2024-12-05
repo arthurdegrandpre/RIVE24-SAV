@@ -36,6 +36,8 @@ library(lme4)
 library(mgcv)
 library(performance)
 library(ggpubr)
+library(sf)
+library(mapview)
 ```
 
 Préparer les données pour l'analyse des secteurs visés, et création d'une variable présence/absence binaire.
@@ -187,19 +189,33 @@ Modélisation alternative des effets; gamm
 ```
 
 
-2.  Évaluer l'importance de la variabilité physico-chimique / optique de l'eau dans la prédiction de la présence de VAS dans le cas du lac Saint-Pierre, via l'intégration des masses d'eau dans le modèle prédictif.
+2.  Évaluer l'importance de la variabilité physico-chimique / optique de l'eau dans la prédiction de la présence de VAS dans le cas du lac Saint-Pierre, via l'intégration de masses d'eau approximatives dans le modèle prédictif.
 
 Séparation des masses d'eau
 
 ```{r}
-lsp = df %>% filter(Secteur %in% c("LacStPierre"))
+lsp = df %>% filter(Secteur %in% c("LacStPierre")) %>% 
+  ungroup()
 
 hist(lsp$Turbidite)
 hist(lsp$Conductivite)
 
-hc = hclust(dist(lsp %>% select(Turbidite, Conductivite, pH, TemperatureEau, Latitude, Longitude)))
+lsp %>%
+  select(Turbidite,
+             Conductivite,
+             pH,
+             TemperatureEau,
+             Latitude,
+             Longitude)
+
+hc = hclust(
+  dist(
+      as.data.frame(lapply(select(lsp, Turbidite, Conductivite, Latitude), function(x) scale(x, center = T)))
+    )
+  )
+
 plot(hc)
-clusters = cutree(hc, k=8)
+clusters = cutree(hc, k=6)
 
 lsp %>%
   ungroup() %>% 
@@ -215,3 +231,63 @@ lsp %>%
 table(clusters)
 ```
 
+```{r}
+lsp2 = lsp %>%
+  ungroup() %>% 
+  mutate(clusters = as.factor(clusters),
+         Annee = as.factor(Annee)) %>%
+  na.omit(Turbidite, Prof_Moyenne)
+
+table(lsp2$Annee)
+
+training = lsp2 %>% slice_sample(n=80,by=Annee, replace = F)
+table(training$Annee)
+
+fit_lsp = glmer(
+  Presence ~ Turbidite + Prof_Moyenne + (1|Annee) + (1|clusters),
+            data = training,
+            family = binomial)
+
+fit_lspx = glmer(
+  Presence ~ Turbidite * Prof_Moyenne + (1|Annee) + (1|clusters),
+            data = training,
+            family = binomial)
+
+compare_performance(fit_lsp, fit_lspx)
+
+summary(fit_lsp)
+
+lsp2$pred = predict(fit_lsp, lsp2, new.data=lsp2, type="response")
+
+library(sf)
+lsp3 = st_as_sf(lsp2, coords=c("Longitude", "Latitude")) %>% 
+  st_set_crs(4326)
+
+library(mapview)
+mapview(lsp3, zcol="pred")
+
+lsp4 = lsp3 %>% 
+mutate(prediction = case_when(as.numeric(pred) >= 0.65 ~ 1,
+                              as.numeric(pred) < 0.65 ~ 0))
+lsp4 %>% 
+  ggplot(aes(col=as.factor(prediction)))+
+  geom_sf()+
+  facet_wrap(~Annee)+
+  labs(col="présence prédite, seuil 0.65")
+
+lsp4 %>% 
+  ggplot(aes(col=as.factor(Presence)))+
+  geom_sf()+
+  facet_wrap(~Annee)+
+  labs(col="présence observée")
+
+lsp4 %>% 
+  mutate(erreur = case_when(Presence == prediction ~ 0,
+                          Presence != prediction ~ 1)) %>%
+  ggplot(aes(col=as.factor(erreur)))+
+  geom_sf()+
+  facet_wrap(~Annee)+
+  labs(col="erreur de prédiction")
+
+```
+Le R2 conditionnel est beaucoup plus élevé en présence de l'effet masse d'eau, mais le R2 marginal reste faible. La visualisation des prédictions révèle de fortes incohérences avec les observations sur le terrain.
